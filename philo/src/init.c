@@ -7,21 +7,20 @@ int init_mutexes(t_mutexes *mutexes, t_arguments args)
     i = 0;
     if (mutexes != NULL)
         return 0;
-    mutexes->forks = (pthread_mutex_t *)malloc ( args.nof * sizeof(pthread_mutex_t));
+    mutexes->forks = (pthread_mutex_t **)malloc ( args.nof * sizeof(pthread_mutex_t));
     if (mutexes->forks == NULL)
         return 0;
     pthread_mutex_init(&(mutexes->spleepmutex), NULL);
-    pthread_mutex_init(&(mutexes->thinkmutex), NULL);
+
     while (i < args.nof)
     {
-        pthread_mutex_init(&(mutexes->forks[i]), NULL);
+        pthread_mutex_init(mutexes->forks[i], NULL);
         i++;
     }
     mutexes->eat = &mutex_eat;
     mutexes->sleep = &mutex_sleep;
-    mutexes->think = &mutex_think;
     mutexes->finish_sleeping = &mutex_finish_sleeping;
-    mutexes->finish_thinking = &mutex_finish_thinking;
+  
     mutexes->finish_eating = &mutex_finish_eating;
     return 1;
 }
@@ -50,7 +49,7 @@ t_philo **create_philosofers(t_arguments args)
     t_philo **list;
     int i;
  
-    list = (t_philo *)malloc(args.nof * sizeof(t_philo));
+    list = (t_philo **)malloc(args.nof * sizeof(t_philo));
     if (list == NULL)
         return (NULL);
     i = 0;
