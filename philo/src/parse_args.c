@@ -48,12 +48,12 @@ int  init_arguments(t_arguments *this, int argc, char **argv)
 {
     if (this == NULL || argv == NULL || argc < 5 || argc > 6)
         return 0;
-    this->nof = ft_atoi(argv[1]);
-    this->ttd = ft_atoi(argv[2]);
-    this->tte= ft_atoi(argv[3]);
-    this->tts = ft_atoi(argv[4]);
+    this->nof = atoi(argv[1]);
+    this->ttd = atoi(argv[2]);
+    this->tte= atoi(argv[3]);
+    this->tts = atoi(argv[4]);
     if (argc == 6)
-        this->notepme = ft_atoi(argv[5]);
+        this->notepme = atoi(argv[5]);
     else
         this->notepme = -1;
     return (check_values(this));

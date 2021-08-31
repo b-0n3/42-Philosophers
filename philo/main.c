@@ -8,28 +8,35 @@ void print_usage()
     "[number_of_times_each_philosopher_must_eat]\n");
 }
 
-t_long		get_current_time(void)
+long		get_current_time(void)
 {
 	struct timeval cur;
 
 	gettimeofday(&cur, NULL);
     // *1000000
-	return ((t_long)cur.tv_sec  + (t_long)cur.tv_usec);
+	return (cur.tv_sec * 1000  + cur.tv_usec);
 }
 
-void luanch_thread(void *item)
+void *luanch_thread(void *item)
 {
     t_philo *this;
 
     this = (t_philo *) item;
     while(1)
     {
+        if (this->mutex->one_is_dead)
+            return NULL;
         this->eat(this);
         this->sleep(this);
         this->think(this);
     }
+    return NULL;
 }
-
+void my_sleep(long time)
+{
+    const long end = get_current_time() + time;   
+    while (get_current_time() < end); 
+}
 int luanch_sumulation(t_arguments args , t_philo **philos, t_mutexes *mutexes)
 {
         int i;
@@ -37,10 +44,12 @@ int luanch_sumulation(t_arguments args , t_philo **philos, t_mutexes *mutexes)
         i = 0;
         while (i < args.nof)
         {
+            philos[i]->args = args;
             philos[i]->mutex = mutexes;
-            pthread_create(&philos[i]->thread, NULL , &luanch_thread,(void *)philos[i]);
+            pthread_create(&(philos[i]->thread), NULL , &luanch_thread, (void *)philos[i]);
             i++;
         }
+    return 1;
 }
 
 int main(int argc, char **argv)
