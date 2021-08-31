@@ -13,8 +13,7 @@ long		get_current_time(void)
 	struct timeval cur;
 
 	gettimeofday(&cur, NULL);
-    // *1000000
-	return (cur.tv_sec * 1000  + cur.tv_usec);
+	return (cur.tv_sec * 1000  + cur.tv_usec / 1000);
 }
 
 void *luanch_thread(void *item)
