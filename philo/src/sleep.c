@@ -2,12 +2,12 @@
 
 void philo_sleep(t_philo *this)
 {
-    if (this->mutex->one_is_dead)
+    if (this->mutex->one_is_dead || this->dead)
         return;
-    this->mutex->sleep(this->mutex);
+ //   this->mutex->sleep(this->mutex);
      write_message("is sleeping\n", this->id, this->mutex, 0);
     my_sleep(this->args.tts);
-    this->mutex->finish_sleeping(this->mutex);
+  //  this->mutex->finish_sleeping(this->mutex);
 }
 void mutex_sleep(t_mutexes *this)
 {

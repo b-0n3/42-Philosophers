@@ -24,8 +24,9 @@ typedef struct s_mutexes
     pthread_mutex_t **forks;
     pthread_mutex_t write;
      int one_is_dead;
+    long start_time;
+    void (*free)(struct s_mutexes *this, t_arguments args);
     void (*sleep)(struct s_mutexes *this);
- 
     void (*eat)(struct s_mutexes *this, int left, int right);
     void (*finish_sleeping)(struct s_mutexes *this);
     void (*finish_eating)(struct s_mutexes *this, int left, int right);
@@ -49,9 +50,10 @@ typedef struct s_philo
     void (*sleep)(struct s_philo *this);
 }   t_philo;
 
+void mutex_free(t_mutexes *this, t_arguments args);
 void write_message(char *str, int id, t_mutexes *mutex, int dead);
 void my_sleep(long time);
-long		get_current_time(void);
+long get_current_time(void);
 void philo_eat(t_philo *this);
 void philo_think(t_philo *this);
 void philo_sleep(t_philo *this);
@@ -65,5 +67,6 @@ int init_arguments(t_arguments *this, int argc, char **argv);
 int init_mutexes(t_mutexes *mutexes, t_arguments args);
 t_philo *new_philo(t_arguments args, int id);
 t_philo **create_philosofers(t_arguments args);
+void free_all(t_arguments args , t_philo **philos);
 
 #endif

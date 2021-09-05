@@ -7,13 +7,13 @@ int init_mutexes(t_mutexes *mutexes, t_arguments args)
     i = 0;
     if (mutexes == NULL)
         return 0;
-    mutexes->forks = (pthread_mutex_t **)malloc ( args.nof * sizeof(pthread_mutex_t *));
+    mutexes->forks = (pthread_mutex_t **)malloc ((args.nof + 1) * sizeof(pthread_mutex_t *));
     if (mutexes->forks == NULL)
         return 0;
 
     pthread_mutex_init(&(mutexes->spleepmutex), NULL);
     pthread_mutex_init(&(mutexes->write), NULL);
-    while (i < args.nof)
+    while (i <= args.nof)
     {
         mutexes->forks[i] = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
         pthread_mutex_init(mutexes->forks[i], NULL);
@@ -23,7 +23,7 @@ int init_mutexes(t_mutexes *mutexes, t_arguments args)
     mutexes->eat = &mutex_eat;
     mutexes->sleep = &mutex_sleep;
     mutexes->finish_sleeping = &mutex_finish_sleeping;
-  
+    mutexes->free = &mutex_free;
     mutexes->finish_eating = &mutex_finish_eating;
     return 1;
 }
@@ -40,7 +40,7 @@ t_philo *new_philo(t_arguments args, int id)
     philo->dead = 0;
     philo->last_eat_time = get_current_time();
     philo->left_fork_id = (id - 1) % args.nof; 
-    philo->right_fork_id = id % args.nof; 
+    philo->right_fork_id = id % args.nof;
     philo->nb_eat = 0;
     philo->check_death = &philo_check_death;
     philo->eat = &philo_eat;

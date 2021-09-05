@@ -8,34 +8,6 @@ void philo_check_death(t_philo *this)
         this->last_eat_time = get_current_time();
 }
 
-void free_all(t_arguments args , t_philo **philos)
-{
-    int i;
-    t_mutexes *mutex;
-
-    i = 0;
-    mutex = NULL;
-    while(i < args.nof)
-    {
-        mutex = philos[i]->mutex;
-        free(philos[i]);
-        i++;
-    }
-    free(philos);
-    if (mutex != NULL)
-    {
-        i = 0;
-        sem_close((&mutex->spleepmutex));
-        sem_close((&mutex->write));
-        while(i < args.nof)
-        {
-            sem_close(mutex->forks[i]);
-            free(mutex->forks[i]);
-            i++;
-        }
-        free(mutex->forks);
-    }
-}
 int  check_nb_eat(t_arguments args ,t_philo **philos)
 {
     int i;
@@ -54,10 +26,13 @@ int  check_nb_eat(t_arguments args ,t_philo **philos)
 
 void write_message(char *str, int id, t_mutexes *mutex, int dead)
 {
-    sem_wait(&(mutex->write));
-    printf("%ld %d %s", get_current_time(), id, str);
+    const long time = get_current_time() - mutex->start_time;
+      if (mutex == NULL)
+        return;
+    pthread_mutex_lock(&(mutex->write));
+    printf("%ld %d %s", time, id, str);
     if (!dead)
-        sem_post(&(mutex->write));
+        pthread_mutex_unlock(&(mutex->write));
 
 }
 void god_bless_philosophers(t_arguments args , t_philo **philos)
@@ -71,15 +46,21 @@ void god_bless_philosophers(t_arguments args , t_philo **philos)
         i = 0;
         if (args.notepme != -1 && check_nb_eat(args , philos))
         {
-            free_all(args, philos);
-            return ;
+         
+             philos[0]->mutex->one_is_dead = 1;
+             usleep(100);
+             free_all(args, philos);
+            return;
         }
         while (i < args.nof)
         {
+             if (get_current_time() > philos[i]->last_eat_time + philos[i]->args.ttd)
+                     philos[i]->dead = 1;
             if (philos[i]->dead)
             {
-                philos[i]->mutex->one_is_dead = 1;
                 write_message("is dead\n", philos[i]->id, philos[i]->mutex, 1);
+                philos[i]->mutex->one_is_dead = 1;
+                usleep(100);
                 free_all(args, philos);
                return;
             }
