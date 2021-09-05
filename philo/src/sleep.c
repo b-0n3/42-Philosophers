@@ -1,19 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sleep.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aait-ham <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/05 18:50:05 by aait-ham          #+#    #+#             */
+/*   Updated: 2021/09/05 18:50:07 by aait-ham         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-void philo_sleep(t_philo *this)
+void	philo_sleep(t_philo *this, void *ptr)
 {
-    if (this->mutex->one_is_dead || this->dead)
-        return;
- //   this->mutex->sleep(this->mutex);
-     write_message("is sleeping\n", this->id, this->mutex, 0);
-    my_sleep(this->args.tts);
-  //  this->mutex->finish_sleeping(this->mutex);
-}
-void mutex_sleep(t_mutexes *this)
-{
-    pthread_mutex_lock(&(this->spleepmutex));
-}
-void mutex_finish_sleeping(t_mutexes *this)
-{
-    pthread_mutex_unlock(&(this->spleepmutex));
+	if (this->mutex->one_is_dead || this->dead || ptr != NULL)
+		return ;
+	write_message("is sleeping\n", this->id, this->mutex, 0);
+	my_sleep(this->args.tts);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_args.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aait-ham <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/05 18:49:57 by aait-ham          #+#    #+#             */
+/*   Updated: 2021/09/05 18:49:58 by aait-ham         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 int	ft_isspace(char c)
@@ -35,26 +47,26 @@ int	ft_atoi( char *str)
 	return ((int)n * signe);
 }
 
-int check_values(t_arguments *this)
+int	check_values(t_arguments *this)
 {
-    return !(this->nof == INT32_MAX 
-    || this->ttd == INT32_MAX
-    || this->tte == INT32_MAX
-    || this->tts == INT32_MAX
-    || this->notepme == INT32_MAX);
+	return (!(this->nof == INT32_MAX
+			|| this->ttd == INT32_MAX
+			|| this->tte == INT32_MAX
+			|| this->tts == INT32_MAX
+			|| this->notepme == INT32_MAX));
 }
 
-int  init_arguments(t_arguments *this, int argc, char **argv)
+int	init_arguments(t_arguments *this, int argc, char **argv)
 {
-    if (this == NULL || argv == NULL || argc < 5 || argc > 6)
-        return 0;
-    this->nof = ft_atoi(argv[1]);
-    this->ttd = ft_atoi(argv[2]);
-    this->tte= ft_atoi(argv[3]);
-    this->tts = ft_atoi(argv[4]);
-    if (argc == 6)
-        this->notepme = ft_atoi(argv[5]);
-    else
-        this->notepme = -1;
-    return (check_values(this));
+	if (this == NULL || argv == NULL || argc < 5 || argc > 6)
+		return (0);
+	this->nof = ft_atoi(argv[1]);
+	this->ttd = ft_atoi(argv[2]);
+	this->tte = ft_atoi(argv[3]);
+	this->tts = ft_atoi(argv[4]);
+	if (argc == 6)
+		this->notepme = ft_atoi(argv[5]);
+	else
+		this->notepme = -1;
+	return (check_values(this));
 }
