@@ -31,6 +31,15 @@ void	mutex_free(t_mutexes *this, t_arguments args)
 	}
 }
 
+void	burn_dead_philo(t_philo **philos, int i, t_arguments args)
+{
+	philos[i]->dead = 1;
+	write_message("is dead\n", philos[i]->id, philos[i]->mutex, 1);
+	philos[i]->mutex->one_is_dead = 1;
+	usleep(100);
+	free_all(args, philos);
+}
+
 void	free_all(t_arguments args, t_philo **philos)
 {
 	int			i;

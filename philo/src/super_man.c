@@ -77,14 +77,7 @@ void	god_bless_philosophers(t_arguments args, t_philo **philos)
 			if (philos[i]->dead
 				|| (get_current_time()
 					> philos[i]->last_eat_time + philos[i]->args.ttd))
-			{
-				philos[i]->dead = 1;
-				write_message("is dead\n", philos[i]->id, philos[i]->mutex, 1);
-				philos[i]->mutex->one_is_dead = 1;
-				usleep(100);
-				free_all(args, philos);
-				return ;
-			}
+				return (burn_dead_philo(philos, i, args));
 			i++;
 		}
 	}

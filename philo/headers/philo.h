@@ -59,6 +59,7 @@ typedef struct s_philo
 	void		(*sleep)(struct s_philo *this, void *ptr);
 }		t_philo;
 
+void	burn_dead_philo(t_philo **philos, int i, t_arguments args);
 void	mutex_free(t_mutexes *this, t_arguments args);
 void	write_message(char *str, int id, t_mutexes *mutex, int dead);
 void	my_sleep(long time);
